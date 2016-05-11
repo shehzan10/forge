@@ -47,12 +47,6 @@ ELSE(TARGET forge)
     IF(UNIX)
         ADD_DEFINITIONS(-Wall -std=c++11 -fvisibility=hidden)
 
-        # GCC 5.3 and above give errors for mempcy from <string.h>
-        # This is a (temporary) fix for that
-        IF("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "5.3.0")
-            ADD_DEFINITIONS(-D_FORCE_INLINES)
-        ENDIF()
-
         # MacOS specific environment settings
         IF(APPLE)
             ADD_DEFINITIONS(-DOS_MAC)
@@ -78,6 +72,10 @@ ELSE(TARGET forge)
         ADD_DEFINITIONS(-DOS_WIN -DNOMINMAX)
     ENDIF(UNIX)
 ENDIF(TARGET forge)
+
+IF(UNIX)
+    SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations -Wno-unused-function")
+ENDIF()
 
 FILE(GLOB CPU_EXAMPLE_SRC_FILES "cpu/*.cpp")
 FOREACH(FILE ${CPU_EXAMPLE_SRC_FILES})
@@ -105,6 +103,13 @@ IF (BUILD_EXAMPLES_CUDA)
             SET(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -Xcompiler -std=c++98")
         ENDIF()
 
+        # GCC 5.3 and above give errors for mempcy from <string.h>
+        # This is a (temporary) fix for that
+        IF("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "5.3.0")
+            ADD_DEFINITIONS(-D_FORCE_INLINES)
+        ENDIF()
+
+
         INCLUDE_DIRECTORIES(${CUDA_INCLUDE_DIRS})
 
         FILE(GLOB CUDA_EXAMPLE_SRC_FILES "cuda/*.cu")
@@ -129,9 +134,6 @@ ENDIF()
 IF (BUILD_EXAMPLES_OPENCL)
     FIND_PACKAGE(OpenCL QUIET)
     IF(OpenCL_FOUND)
-        IF(UNIX)
-            SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations -Wno-unused-function")
-        ENDIF()
         FILE(GLOB OpenCL_EXAMPLE_SRC_FILES "opencl/*.cpp")
         INCLUDE_DIRECTORIES(
             "${CMAKE_CURRENT_SOURCE_DIR}/opencl"
