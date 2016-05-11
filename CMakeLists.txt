@@ -85,13 +85,13 @@ ENDIF(BUILD_DOCUMENTATION)
 #--------------------------------------------------------------------
 INCLUDE(CMakePackageConfigHelpers)
 
-configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/ForgeConfig.cmake.in"
-                              "${CMAKE_CURRENT_BINARY_DIR}/ForgeConfig.cmake"
+configure_package_config_file("${CMAKE_MODULE_PATH}/ForgeConfig.cmake.in"
+                              "${CMAKE_MODULE_PATH}/ForgeConfig.cmake"
                               INSTALL_DESTINATION ${FG_INSTALL_CMAKE_DIR}
                               PATH_VARS CMAKE_INSTALL_PREFIX
                               NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
-write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/ForgeConfigVersion.cmake"
+write_basic_package_version_file("${CMAKE_MODULE_PATH}/ForgeConfigVersion.cmake"
                                  VERSION ${FG_VERSION}
                                  COMPATIBILITY SameMajorVersion)
 
@@ -106,8 +106,8 @@ INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/" DESTINATION "${FG_INSTA
     PATTERN ".gitignore" EXCLUDE
 )
 
-INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/ForgeConfig.cmake"
-              "${CMAKE_CURRENT_BINARY_DIR}/ForgeConfigVersion.cmake"
+INSTALL(FILES "${CMAKE_MODULE_PATH}/ForgeConfig.cmake"
+              "${CMAKEMODULE_PATH}/ForgeConfigVersion.cmake"
               DESTINATION ${FG_INSTALL_CMAKE_DIR})
 
 # We are only installing the source files for examples.
