@@ -74,7 +74,7 @@ ELSE(TARGET forge)
 ENDIF(TARGET forge)
 
 IF(UNIX)
-    SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations -Wno-unused-function")
+    SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations -Wno-unused-function -pthread")
 ENDIF()
 
 FILE(GLOB CPU_EXAMPLE_SRC_FILES "cpu/*.cpp")
